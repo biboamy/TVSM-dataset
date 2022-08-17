@@ -1,0 +1,54 @@
+# optimizer
+learning_rate: 0.001
+patience: 2 #2 # wait how many epochs without updating will adjust the learning rate
+decay_factor: 0.3 # how many percent decrease for the learning rate each time
+weight_decay: 0.0001 #0.0001
+
+# general parameters
+gradient_clip_val: 100 # maximum gradient value
+seed: 42 # random seed
+gpus: 1 # how many paralleled gpu for training
+early_stopping_patience: 10 #10 # wait for how many epochs not updating before applying early stopping
+batch_size: 16 #16 # numbers of batch
+num_workers: 4 # numbers of workers for paralleled dataloader
+epochs: 1000 # maximum epochs
+load_pretrain: None #'25' # pre-trained model version number, None without loading pre-trained model
+
+# CTC parameters
+use_ctc: False # whether to use CTC loss
+ctc_type: 'CMU_ctl' # type of ctc function: [CMU_ctl, CMU_ctc, Torch_ctc]
+ctc_weight: 0.3 # ctc loss wieght
+
+# data augmentation
+input_features: 'mel' # which features as the input ['mel', 'vgg']
+use_pcen: False # use pcen instead of logmel
+
+# output
+save_path: 'logger/' # path to store the output model
+pool_size: 2 # output pooling size
+
+# dataset
+dataset: 'netflix' # which dataset to use: [netflix, avaspeech, netflix_whole]
+data_path: '../data/netflix/' # path of the dataset:
+duration: 20 # duration of each chunk
+sr: 16000 # sampling rate of the input audio: [22050 or 16000]
+n_class: 2 # numbers of output classes
+n_sample: 10 # numbers of random samples of each audio
+
+# model_name
+model_name: 'crnn' # tcn / vgg / crnn
+kernal_size: 3 # numbers of kernal, only useful when model_name equals tcn
+n_blocks: 8 # numbers of dilated blocks, only useful when model_name equals tcn
+n_stacks: 2 # numbers of repeated blocks, only useful when model_name equals tcn
+rnn_layers: 1 # how many layer of RNN, only useful when model_name equals vgg
+n_hidden: 64 # bottle neck layer's size 64 for tcn 512 for vgg
+dropout_rate: 0.135883 # dropout rate
+n_features: 128 # numbers of feature bin of the input data
+n_fft: 1024 # numbers of fft to calculate mel spectrogram
+hop_size: 512 #512 # numbers of hop_size to calculate labels
+
+
+# testing
+threshold_s: 0.5 # threshold for the speech prediction output
+threshold_m: 0.5 # threshold for the music prediction output
+
