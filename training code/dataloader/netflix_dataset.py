@@ -26,8 +26,6 @@ class NetflixDataset(data.Dataset):
         for line in lines:
             start, end, label = line.strip().split('\t')
             ident = 300
-            #if not self.labels_name == 'labels' and label == 'm':
-            #    ident = 0
             start = int((float(start)-ident)*self.sr/self.hop_size)
             end = int((float(end)-ident)*self.sr/self.hop_size)
             if start >= 0 and start < duration:

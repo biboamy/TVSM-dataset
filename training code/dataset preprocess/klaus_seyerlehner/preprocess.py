@@ -14,4 +14,4 @@ def process_label(dir_path, des_path):
 
     print(data)
 
-process_label(None, '~/data/OpenBMAT/labels/')
+#process_label(None, '~/data/OpenBMAT/labels/')

@@ -22,7 +22,7 @@ def calculate_dataset_length(dataset_path):
 
 # split the dataset into training, validation, and test (optional)
 def split_dataset(dataset_path, split_test=True):
-    file_list = glob.glob(os.path.join(dataset_path, 'labels', '*')) #np.load('netflix/subsetID.npy')#glob.glob(os.path.join(dataset_path, 'audio', '*'))
+    file_list = glob.glob(os.path.join(dataset_path, 'labels', '*')) 
     if split_test:
         dataset_len = len(file_list)
         train_files, test_files = train_test_split(file_list, test_size=0.1)
@@ -71,7 +71,7 @@ def combine_labels(dir_path, com_path, des_path):
                         oup_data.write(line)
                 oup_data.close()
 
-combine_labels('../../../AVASpeech_Music_Labels/music labels/', '../../../AVASpeech_Music_Labels/speech labels/', '../../../AVASpeech_Music_Labels/mix labels/')
+#combine_labels('../../../AVASpeech_Music_Labels/music labels/', '../../../AVASpeech_Music_Labels/speech labels/', '../../../AVASpeech_Music_Labels/mix labels/')
 
 def csv_to_npy(dir_path, des_path):
     if not os.path.exists(des_path):

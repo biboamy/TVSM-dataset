@@ -6,16 +6,11 @@ import soundfile as sf
 import random
 import os
 import sys
-sys.path.append("./dataloader/")
 from dataset_module import Dataset
 from model import preprocess
 import torch
 
-'''
-default dataset path:
-	audio: /{root folder}/OpenBMAT/audio
-	labels: /{root folder}/OpenBMAT/labels 
-'''
+
 
 class BMATDataset(Dataset):
 	def __init__(self, data_path, partition, duration=4, sr=16000, hop_size=1024, n_sample=1, features='mel', n_fft=1024):
@@ -23,8 +18,7 @@ class BMATDataset(Dataset):
 		super(BMATDataset, self).__init__(data_path, partition, duration, sr, hop_size, n_sample, features)
 
 	def __getitem__(self, index):
-		#try:
-		if True:
+		try:
 			if self.partition == 'train':
 				index = index // self.n_sample
 
@@ -49,7 +43,6 @@ class BMATDataset(Dataset):
 			
 			return features, label, self.file_list[index]
 
-		#except Exception as e:
-		#	print(e)
-		#	index = index - 1 if index > 0 else index + 1
-		#	return self.__getitem__(index)
+		except Exception as e:
+			index = index - 1 if index > 0 else index + 1
+			return self.__getitem__(index)

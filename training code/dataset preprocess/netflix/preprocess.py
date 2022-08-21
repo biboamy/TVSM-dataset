@@ -76,7 +76,7 @@ def extract_vgg_features(dir_path, des_path):
                 np.save(des_path + file.replace('.wav', '.npy'), x.detach().cpu().numpy())
 
 # (channel) x frames x bins
-extract_vgg_features('/Volumes/Amy Volume/netflix/data/netflix_eval/audio_16000/', '/Volumes/Amy Volume/netflix/data/netflix_eval/vgg_features/')
+#extract_vgg_features('netflix/data/netflix_eval/audio_16000/', 'netflix/data/netflix_eval/vgg_features/')
 
 # extract pcen features
 def extract_pcen_features(dir_path, des_path):
@@ -145,7 +145,7 @@ def extract_mel_features(dir_path, des_path):
             np.save(des_path + file.replace('.wav', '.npy'), data.detach().cpu().numpy())
             
 # bins x frames
-#extract_mel_features('/Volumes/Amy Volume/netflix/data/netflix_eval/audio_16000/', '/Volumes/Amy Volume/netflix/data/netflix_eval/mel_features/')
+#extract_mel_features('netflix/data/netflix_eval/audio_16000/', 'netflix/data/netflix_eval/mel_features/')
 
 # chunk numpy array into 20 seconds
 def chunk_files(dir_path, des_path):

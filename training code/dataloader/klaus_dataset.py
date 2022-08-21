@@ -8,11 +8,8 @@ import os
 import sys
 sys.path.append("./dataloader/")
 from dataset_module import Dataset
-'''
-default dataset path:
-    audio: /{root folder}/klaus/audio
-    labels: /{root folder}/klaus/labels or /{root folder}/klaus/labels_SBSMD
-'''
+
+
 
 class KlausDataset(Dataset):
 

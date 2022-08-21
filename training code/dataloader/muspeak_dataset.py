@@ -6,13 +6,9 @@ import soundfile as sf
 import random
 import os
 import sys
-sys.path.append("./dataloader/")
 from dataset_module import Dataset
-'''
-default dataset path:
-    audio: /{root folder}/muspeak/audio
-    labels: /{root folder}/muspeak/labels or /{root folder}/muspeak/labels_SBSMD
-'''
+
+
 
 class MuspeakDataset(Dataset):
 

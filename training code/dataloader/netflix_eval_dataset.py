@@ -6,13 +6,9 @@ import soundfile as sf
 import random
 import os
 import sys
-sys.path.append("./dataloader/")
 from dataset_module import Dataset
-'''
-default dataset path:
-    audio: /{root folder}/netflix_eval/audio
-    labels: /{root folder}/netflix_eval/labels or /{root folder}/netflix_eval/labels_SBSMD
-'''
+
+
 
 class NetflixEvalDataset(Dataset):
 

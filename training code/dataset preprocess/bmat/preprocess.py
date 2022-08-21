@@ -37,4 +37,4 @@ def downsample_audio(dir_path, des_path):
 		print(data.shape, sr)
 		sf.write(os.path.join(des_path, file), data, sr)
 
-downsample_audio('../../../data/OpenBMAT/audio/', '../../../data/OpenBMAT/audio_16000/')
+#downsample_audio('../../../data/OpenBMAT/audio/', '../../../data/OpenBMAT/audio_16000/')

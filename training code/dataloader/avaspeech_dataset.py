@@ -8,11 +8,8 @@ import os
 import sys
 sys.path.append("./dataloader/")
 from dataset_module import Dataset
-'''
-default dataset path:
-    audio: /{root folder}/avaspeech/audio
-    labels: /{root folder}/avaspeech/labels or /{root folder}/avaspeech/labels_SBSMD
-'''
+
+
 
 class AVASpeechDataset(Dataset):
 
