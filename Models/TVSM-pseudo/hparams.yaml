@@ -14,7 +14,7 @@ hop_size: 512
 input_features: mel
 kernal_size: 3
 learning_rate: 0.001
-load_pretrain: '31'
+load_pretrain: null
 model_name: crnn
 n_blocks: 8
 n_class: 2
@@ -27,7 +27,7 @@ num_workers: 4
 patience: 2
 pool_size: 2
 rnn_layers: 1
-save_path: logger/
+save_path: logger/default/version_28
 seed: 42
 sr: 16000
 threshold_m: 0.5
