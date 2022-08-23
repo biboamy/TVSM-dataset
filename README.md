@@ -59,4 +59,4 @@ For more information, please visit our paper
 
 
 ## Contact
-Please feel free to contact [yunning.hung@bytedance.com](mailto:yunning.hung@bytedance.com) or open an issue here if you have any questions about the dataset or the support code.
+Please feel free to contact [yunning.hung@bytedance.com](mailto:yhung33@gatech.edu) or open an issue here if you have any questions about the dataset or the support code.
