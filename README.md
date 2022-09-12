@@ -6,7 +6,7 @@ The dataset aims to facilitate research on speech and music detection tasks.
 
 ## Get the dataset
 
-- The dataset can be downloaded via Zenodo.org [The dataset is being processed. It Will be released on Sep 11. Please come back later!].
+- The dataset can be downloaded via Zenodo.org [The dataset Will be released on Sep 13 (sorry it's still under processing!). Please come back later!].
 - The paper can be downloaded via [EURASIP open access](https://asmp-eurasipjournals.springeropen.com/articles/10.1186/s13636-022-00253-8).
 - This repo contains materials and codebase to reproduce the baseline experiment in the paper.
 
