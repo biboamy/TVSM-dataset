@@ -6,7 +6,7 @@ The dataset aims to facilitate research on speech and music detection tasks.
 
 ## Get the dataset
 
-- The dataset can be downloaded via Zenodo.org [Temporarily using google drive](https://drive.google.com/drive/folders/1ViEBEBptVxSChNoHf8x_EA3KbACKcEG3?usp=sharing).
+- The dataset can be downloaded via [Zenodo.org](https://zenodo.org/record/7025971).
 - The paper can be downloaded via [EURASIP open access](https://asmp-eurasipjournals.springeropen.com/articles/10.1186/s13636-022-00253-8).
 - This repo contains materials and codebase to reproduce the baseline experiment in the paper.
 
