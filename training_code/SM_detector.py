@@ -7,7 +7,7 @@ import torch.utils.data as data
 import torch.nn as nn
 import os
 from utils.creator import dataset_creator, model_creator, preprocess_creator
-from utils.general_utils import model_output_to_csv
+from utils.general_utils import model_output_to_csv, mono_check
 from utils.ctc_loss import ctl_loss
 import soundfile as sf
 import torchaudio
@@ -20,7 +20,7 @@ class SM_detector(pl.LightningModule):
         super().__init__()
         self.transform = preprocess_creator(hparams, 'melspec')
         self.model = model_creator(hparams, hparams.n_features, hparams.n_class, hparams.model_name)
-        print(sum(p.numel() for p in self.model.parameters() if p.requires_grad))
+        print(f'Numbers of parameters: {sum(p.numel() for p in self.model.parameters() if p.requires_grad)}')
         self.loss_func = nn.functional.binary_cross_entropy_with_logits
         self.ctc_loss = ctl_loss
 
@@ -154,7 +154,6 @@ class SM_detector(pl.LightningModule):
             tqdm_dict[k] = torch.stack([x[k] for x in outputs]).mean()
         logger.info('Epoch {}, Activation Loss, {:.6f}'.format(self.trainer.current_epoch + 1, tqdm_dict['va_act_loss']))
         self.log('val_loss', tqdm_dict['va_act_loss'], prog_bar=True)
-        print()
         #return {'val_loss': tqdm_dict['va_act_loss'], 'log': tqdm_dict}
 
     def test_step(self, batch, batch_idx):
@@ -184,6 +183,50 @@ class SM_detector(pl.LightningModule):
         oup_dict['Speech'] = sum(oup_dict['Speech']) / length
         return oup_dict
 
+    def prediction(self, audio_path, output_dir, output_name, music_threshold, speech_threshold):
+        '''
+        :param audio_path: path to the audio files (str or os.path object)
+        :param output_dir: path to the output directory (str or os.path object)
+        :param music_threshold: threshold to binarize music prediction (float)
+        :param speech_threshold: threshold to binarize speech prediction (float)
+        '''
+
+        # load audio into tensor
+        audio, sr = sf.read(audio_path, always_2d=True)
+        audio = torch.from_numpy(audio).to(self.use_device).T.float()
+        audio = mono_check(audio)
+
+        # check whether the sampling rate is matched
+        if sr != 16000:
+            resample = torchaudio.transforms.Resample(sr, 16000)
+            audio = resample(audio)
+            x = self.transform(audio.unsqueeze(1).float()).squeeze(1)[:, :self.hparams.n_features]
+
+        # transformed int pcen or log spectrogram
+        if self.use_pcen:
+            x = self.transform_pcen(x)
+        else:
+            x = torch.log(x + EPSILON)
+
+        # predict labels
+        c_size = int(x.shape[-1] // 4)
+        est_label = []
+        for i in range(x.shape[-1]//c_size):
+            est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]))
+        est_label = torch.cat(est_label, -1)
+        est_label = torch.max_pool1d(est_label, 3, 3)
+
+        frame_time = 1 / ((self.hparams.sr / self.hparams.hop_size) / self.hparams.pool_size / 3)
+        est_label = torch.sigmoid(est_label)
+        est_label[:, 0][est_label[:, 0] > self.hparams.threshold_m] = 1
+        est_label[:, 0][est_label[:, 0] <= self.hparams.threshold_m] = 0
+        est_label[:, 1][est_label[:, 1] > self.hparams.threshold_s] = 1
+        est_label[:, 1][est_label[:, 1] <= self.hparams.threshold_s] = 0
+        est_label = est_label.detach().cpu().numpy()[0]
+        model_output_to_csv(est_label.T, frame_time, output_dir, output_name)
+        print(f'Saved audio {output_name}.txt to {output_dir}')
+        
+
     def configure_optimizers(self):
 
         optimizer_det = torch.optim.Adam(self.model.parameters(), lr=self.hparams.learning_rate, weight_decay=self.hparams.weight_decay)
@@ -212,22 +255,9 @@ class SM_detector(pl.LightningModule):
         return self._get_data_loader('test')
 
     @classmethod
-    def load_from_checkpoint(cls, checkpoint_path, default_params, dataset=None):
+    def load_from_checkpoint(cls, checkpoint_path, params, dataset=None):
         checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage)
-        import yaml
-        from argparse import Namespace
-        default_params = yaml.safe_load(open(default_params))
-        inp_harams = Namespace(**default_params)
-
-        model = cls(inp_harams)
-        pretrained_dict = checkpoint['state_dict']
-        model_dict = model.state_dict()
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-        model_dict.update(pretrained_dict)
-        model.load_state_dict(model_dict)
-
-        if dataset is not None:
-            model.hparams.dataset = dataset
-            model.hparams.data_path = '../data/' + dataset
+        model = cls(params)
+        model.load_state_dict(checkpoint['state_dict'])
 
         return model

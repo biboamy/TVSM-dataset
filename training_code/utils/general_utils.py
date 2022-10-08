@@ -65,6 +65,34 @@ def seed_everything(seed=42):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
+
+def mono_check(audio):
+    '''
+    Check whether the audio is mono since our system only support mono audio
+    :param audio: audio matrix with shape: channel x frames  (numpy array or tensor)
+    :return: audio matrix with shape: 1 x frames
+    '''
+    if audio.shape[0] == 1:
+        return audio
+    # preprocess stereo
+    elif audio.shape[0] == 2:
+        audio = audio.sum(0)[None, :] / 2
+    # preprocess 5.1
+    elif audio.shape[0] == 6:
+        L = audio[0]
+        R = audio[1]
+        C = audio[2]
+        Ls = audio[4]
+        Rs = audio[5]
+        Lt = L + 0.707 * Ls + C * 0.707
+        Rt = R + 0.707 * Rs + C * 0.707
+        audio = np.divide(Lt + Rt, 2)[None, :]
+    else:
+        raise Exception("The input audio format is not currently support")
+    # To Do: add more channel support
+    return audio
+    
+
 # Convert input audio to raw wav and output numpy array via ffmpeg
 def ffmpeg_load_audio(filename, sr=48000, channels=6, start=None, duration=None, normalize=False, in_type=np.int16, out_type=np.float64, ffmpeg_path=None):
     """
