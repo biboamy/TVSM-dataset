@@ -168,7 +168,6 @@ class SM_detector(pl.LightningModule):
         est_label[:, 1][est_label[:, 1] > self.hparams.threshold_s] = 1
         est_label[:, 1][est_label[:, 1] <= self.hparams.threshold_s] = 0
         est_label = est_label.detach().cpu().numpy()[0]
-        print(est_label.shape, frame_time, name[0])
         model_output_to_csv(est_label.T, frame_time, des_path, os.path.basename(name[0]))
         return {'m': est_label[0].sum(), 's': est_label[1].sum(), 'l': est_label.shape[-1]}
 
@@ -183,7 +182,7 @@ class SM_detector(pl.LightningModule):
         oup_dict['Speech'] = sum(oup_dict['Speech']) / length
         return oup_dict
 
-    def prediction(self, audio_path, output_dir, output_name, music_threshold, speech_threshold):
+    def prediction(self, audio_path, output_dir, output_name):
         '''
         :param audio_path: path to the audio files (str or os.path object)
         :param output_dir: path to the output directory (str or os.path object)
@@ -214,10 +213,10 @@ class SM_detector(pl.LightningModule):
         for i in range(x.shape[-1]//c_size):
             est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]))
         est_label = torch.cat(est_label, -1)
-        est_label = torch.max_pool1d(est_label, 3, 3)
-
-        frame_time = 1 / ((self.hparams.sr / self.hparams.hop_size) / self.hparams.pool_size / 3)
         est_label = torch.sigmoid(est_label)
+        est_label = torch.max_pool1d(est_label, 6, 6)
+        frame_time = 1 / ((self.hparams.sr / self.hparams.hop_size) / 6)
+        
         est_label[:, 0][est_label[:, 0] > self.hparams.threshold_m] = 1
         est_label[:, 0][est_label[:, 0] <= self.hparams.threshold_m] = 0
         est_label[:, 1][est_label[:, 1] > self.hparams.threshold_s] = 1

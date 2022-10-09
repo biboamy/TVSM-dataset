@@ -1,0 +1,8 @@
+matplotlib==3.6.1
+pytorch-lightning==1.2.10
+soundfile==0.11.0
+torch==1.12.1
+torchaudio==0.12.1
+loguru
+soundfile
+librosa
