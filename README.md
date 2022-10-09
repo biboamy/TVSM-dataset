@@ -55,6 +55,13 @@ Each subset folder has the same structure:
 For more information, please visit our paper
 
 ## Codebase introduction
+
+**Interested in inferencing existing samples? Please visit [predictor.py](https://github.com/biboamy/TVSM-dataset/blob/master/training_code/predictor.py) for usage.
+
+```
+python3 predictor.py --audio_path test.wav
+```
+
 ```
 └─── Evaluation_Output/
 │    └─── AVASpeech/
