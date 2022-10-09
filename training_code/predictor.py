@@ -1,6 +1,6 @@
 '''
 This script is a sample for reference. 
-Simpley replacing model and hparam path if you want to test on other models.
+Simply replacing model and hparam path if you want to test on other models.
 '''
 
 import argparse
