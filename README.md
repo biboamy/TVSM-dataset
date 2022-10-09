@@ -62,6 +62,8 @@ For more information, please visit our paper
 python3 predictor.py --audio_path test.wav
 ```
 
+Please replace `line 31` in `SM_detector.py` with `self.save_hyperparameters(hparams)` if you are using newer pytorch_lightning versions.
+
 ```
 └─── Evaluation_Output/
 │    └─── AVASpeech/
