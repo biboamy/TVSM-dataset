@@ -199,7 +199,8 @@ class SM_detector(pl.LightningModule):
         if sr != 16000:
             resample = torchaudio.transforms.Resample(sr, 16000)
             audio = resample(audio)
-            x = self.transform(audio.unsqueeze(1).float()).squeeze(1)[:, :self.hparams.n_features]
+            
+        x = self.transform(audio.unsqueeze(1).float()).squeeze(1)[:, :self.hparams.n_features]
 
         # transformed int pcen or log spectrogram
         if self.use_pcen:
