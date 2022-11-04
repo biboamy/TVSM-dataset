@@ -4,6 +4,7 @@ Simply replacing model and hparam path if you want to test on other models.
 '''
 
 import argparse
+import torch
 from SM_detector import SM_detector
 from utils.general_utils import yaml_to_parser
 
@@ -16,10 +17,11 @@ TVSM_PSEUDO_HPARAM_PATH = '../Models/TVSM-pseudo/hparams.yaml'
 def main(hparam):
     model = SM_detector.load_from_checkpoint(TVSM_PSEUDO_MODEL_PATH, hparam)
     model = model.eval()
-    model.prediction(
-    	audio_path = hparam.audio_path, 
-    	output_dir = hparam.output_dir, 
-    	output_name = hparam.output_name)
+    with torch.no_grad():
+        model.prediction(
+            audio_path = hparam.audio_path, 
+            output_dir = hparam.output_dir, 
+            output_name = hparam.output_name)
 
     return model
 
