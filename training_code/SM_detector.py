@@ -212,7 +212,7 @@ class SM_detector(pl.LightningModule):
         c_size = int(x.shape[-1] // 4)
         est_label = []
         for i in range(x.shape[-1]//c_size):
-            est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]))
+            est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]).detach().cpu())
         est_label = torch.cat(est_label, -1)
         est_label = torch.sigmoid(est_label)
         est_label = torch.max_pool1d(est_label, 6, 6)
