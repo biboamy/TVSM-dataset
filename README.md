@@ -63,6 +63,7 @@ python3 predictor.py --audio_path test.wav
 ```
 
 Please install [git lfs](https://git-lfs.com/) first then run `git-lfs pull` to restore the checkpoints
+
 Please replace `line 31` in `SM_detector.py` with `self.save_hyperparameters(hparams)` if you are using newer pytorch_lightning versions.
 
 ```
