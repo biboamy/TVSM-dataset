@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import torch
 import random
+import tqdm
 from loguru import logger
 import numpy as np
 import torch.utils.data as data
@@ -199,7 +200,7 @@ class SM_detector(pl.LightningModule):
         if sr != 16000:
             resample = torchaudio.transforms.Resample(sr, 16000)
             audio = resample(audio)
-            
+
         x = self.transform(audio.unsqueeze(1).float()).squeeze(1)[:, :self.hparams.n_features]
 
         # transformed int pcen or log spectrogram
@@ -209,10 +210,13 @@ class SM_detector(pl.LightningModule):
             x = torch.log(x + EPSILON)
 
         # predict labels
-        c_size = int(x.shape[-1] // 4)
+        c_size = int(self.hparams.sr / self.hparams.hop_size * self.hparams.duration)
+        n_chunk = int(np.ceil(x.shape[-1]/c_size))
         est_label = []
-        for i in range(x.shape[-1]//c_size):
-            est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]).detach().cpu())
+        for i in tqdm.tqdm(range(n_chunk)):
+            with torch.no_grad():
+                est_label.append(self.model(x[..., i*(c_size):(i+1)*c_size]).detach().cpu())
+
         est_label = torch.cat(est_label, -1)
         est_label = torch.sigmoid(est_label)
         est_label = torch.max_pool1d(est_label, 6, 6)
