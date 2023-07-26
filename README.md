@@ -59,6 +59,7 @@ For more information, please visit our paper
 **Interested in inferencing existing samples? Please visit [predictor.py](https://github.com/biboamy/TVSM-dataset/blob/master/training_code/predictor.py) for usage.**
 
 ```
+cd training_code
 python3 predictor.py --audio_path test.wav
 ```
 
