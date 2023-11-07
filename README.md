@@ -85,5 +85,8 @@ Please replace `line 31` in `SM_detector.py` with `self.save_hyperparameters(hpa
 - **Models**: the pre-trained checkpoint from CRNN-P-Cue and CRNN-P-Pseu methods
 - **training_code**: code for training the model
 
+## Bug Fix
+If you encounter error "**batch response: This repository is over its data quota. Account responsible for LFS...**", can download the model checkpoint from [Google Drive](https://drive.google.com/drive/folders/1THtEHYUh1lueUFH37n2VAhVy8n2QfNpp?usp=sharing)
+
 ## Contact
 Please feel free to contact [yhung33@gatech.edu](mailto:yhung33@gatech.edu) or open an issue here if you have any questions about the dataset or the support code.
