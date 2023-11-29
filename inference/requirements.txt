@@ -1,0 +1,6 @@
+torch
+torchvision
+torchaudio
+tqdm
+numpy
+librosa
