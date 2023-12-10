@@ -16,6 +16,8 @@ hop_size = 512
 n_features = 128
 duration = 20
 
+music_threshold = 0.5
+speech_threshold = 0.5
 here = os.path.dirname(os.path.abspath(__file__))
 pseudo_model_path = os.path.join(here, 'models', 'TVSM-pseudo', 'epoch=28-step=67192.ckpt.torch.pt')
 
@@ -78,13 +80,23 @@ class SMDetector:
         return audio_label_results
 
 
-def export_result(filename, result):
+def export_prob_result(filename, result):
     with open(filename, 'w', ) as csvfile:
         fieldnames = ['start_time_s', 'end_time_s', 'music_prob', 'speech_prob']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for r in result:
             writer.writerow(r)
+
+
+def export_result(filename, result):
+    with open(filename, 'w') as csvfile:
+        for r in result:
+            print(r)
+            if r['music_prob'] > music_threshold:
+                csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 'm' + '\n')
+            if r['speech_prob'] == speech_threshold:
+                csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 's' + '\n')
 
 
 def main(audio_path, output_dir):
@@ -119,5 +131,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='TVSM Inference', description='TVSM Inference')
     parser.add_argument('--audio_path', type=str, required=True)
     parser.add_argument('--output_dir', type=str, default='outputs/')
+    parser.add_argument('--format', type=str, default='csv', choices=['csv', 'csv_prob'])
     args = parser.parse_args()
     main(args.audio_path, args.output_dir)
