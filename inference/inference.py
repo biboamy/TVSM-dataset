@@ -95,7 +95,7 @@ def export_result(filename, result):
             print(r)
             if r['music_prob'] > music_threshold:
                 csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 'm' + '\n')
-            if r['speech_prob'] == speech_threshold:
+            if r['speech_prob'] > speech_threshold:
                 csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 's' + '\n')
 
 
