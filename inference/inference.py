@@ -80,26 +80,25 @@ class SMDetector:
         return audio_label_results
 
 
-def export_prob_result(filename, result):
-    with open(filename, 'w', ) as csvfile:
-        fieldnames = ['start_time_s', 'end_time_s', 'music_prob', 'speech_prob']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for r in result:
-            writer.writerow(r)
+def export_result(filename, result, format_type='csv'):
+    if format_type == 'csv':
+        with open(filename, 'w') as csvfile:
+            for r in result:
+                print(r)
+                if r['music_prob'] > music_threshold:
+                    csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 'm' + '\n')
+                if r['speech_prob'] > speech_threshold:
+                    csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 's' + '\n')
+    elif format_type == 'csv_prob':
+        with open(filename, 'w', ) as csvfile:
+            fieldnames = ['start_time_s', 'end_time_s', 'music_prob', 'speech_prob']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for r in result:
+                writer.writerow(r)
 
 
-def export_result(filename, result):
-    with open(filename, 'w') as csvfile:
-        for r in result:
-            print(r)
-            if r['music_prob'] > music_threshold:
-                csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 'm' + '\n')
-            if r['speech_prob'] > speech_threshold:
-                csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 's' + '\n')
-
-
-def main(audio_path, output_dir):
+def main(audio_path, output_dir, format_type):
     if not os.path.exists(audio_path):
         print('No such file or directory: ', audio_path)
         return
@@ -119,12 +118,12 @@ def main(audio_path, output_dir):
         for full_path in tqdm.tqdm(all_files):
             file_result = smd.predict_audio(full_path)
             result_csv_filename = os.path.join(output_dir, os.path.basename(full_path) + '.csv')
-            export_result(result_csv_filename, file_result)
+            export_result(result_csv_filename, file_result, format_type)
 
     else:
         file_result = smd.predict_audio(audio_path)
         result_csv_filename = os.path.join(output_dir, os.path.basename(audio_path) + '.csv')
-        export_result(result_csv_filename, file_result)
+        export_result(result_csv_filename, file_result, format_type)
 
 
 if __name__ == '__main__':
@@ -133,4 +132,4 @@ if __name__ == '__main__':
     parser.add_argument('--output_dir', type=str, default='outputs/')
     parser.add_argument('--format', type=str, default='csv', choices=['csv', 'csv_prob'])
     args = parser.parse_args()
-    main(args.audio_path, args.output_dir)
+    main(args.audio_path, args.output_dir, args.format)
