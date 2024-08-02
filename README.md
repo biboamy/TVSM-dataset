@@ -56,6 +56,18 @@ For more information, please visit our paper
 
 ## Codebase introduction
 
+### Inference Code 
+
+Thanks @owlwang for the contribution! The easy-to-use inference code is now included in `inference/`
+
+```
+cd inference
+python3 inference.py --audio_path test.wav --output_dir output/ --format csv/csv_prob
+```
+
+
+### Old inference code
+
 **Interested in inferencing existing samples? Please visit [predictor.py](https://github.com/biboamy/TVSM-dataset/blob/master/training_code/predictor.py) for usage.**
 
 ```
