@@ -9,6 +9,7 @@ import tqdm
 import CRNN
 import argparse
 import csv
+from utils import mono_check
 
 sr = 16000
 n_fft = 1024
@@ -52,6 +53,13 @@ class SMDetector:
         y = np.expand_dims(y, 0)
         audio = torch.from_numpy(y).float()
         audio = audio.to(self.device)
+        audio = mono_check(audio)
+
+        # check whether the sampling rate is matched
+        if sr != 16000:
+            resample = torchaudio.transforms.Resample(sr, 16000)
+            audio = resample(audio)
+
         audio_pcen_data = self.pcen_transform(audio)
         c_size = int(sr / hop_size * duration)
         n_chunk = int(np.ceil(audio_pcen_data.shape[-1] / c_size))
@@ -84,7 +92,6 @@ def export_result(filename, result, format_type='csv'):
     if format_type == 'csv':
         with open(filename, 'w') as csvfile:
             for r in result:
-                print(r)
                 if r['music_prob'] > music_threshold:
                     csvfile.write(r['start_time_s'] + '\t' + r['end_time_s'] + '\t' + 'm' + '\n')
                 if r['speech_prob'] > speech_threshold:
