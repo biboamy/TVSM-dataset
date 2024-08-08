@@ -2,7 +2,6 @@ import os
 import numpy as np
 import librosa
 import torch
-import torchvision.transforms as T
 import torchaudio
 from pcen import PCENTransform
 import tqdm
@@ -53,10 +52,10 @@ class SMDetector:
         self.load_from_checkpoint(model_path)
         self.model.to(self.device)
         self.model.eval()
-        self.pcen_transform = T.Compose([
+        self.pcen_transform = torch.nn.Sequential(
             torchaudio.transforms.MelSpectrogram(SAMPLE_RATE, n_fft=N_FFT, hop_length=HOP_SIZE).to(self.device),
             PCENTransform().to(self.device)
-        ])
+        ).to(self.device)
         logger.info(f'Finish loading SMDetector device: {self.device}')
 
     def load_from_checkpoint(self, model_path):
