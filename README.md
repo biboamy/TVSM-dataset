@@ -12,8 +12,8 @@ The dataset aims to facilitate research on speech and music detection tasks.
 
 ## License and attribution
 ```
-@article{Hung2022,
-  title={{A Large TV Dataset for Speech and Music Activity Detection},
+@ARTICLE{Hung2022,
+  title={A Large TV Dataset for Speech and Music Activity Detection},
   author={Hung, Yun-Ning and Wu, Chih-Wei and Orife, Iroro and Hipple, Aaron and Wolcott, William and Lerch, Alexander},
   journal={EURASIP Journal on Audio, Speech, and Music Processing},
   volume={2022},
