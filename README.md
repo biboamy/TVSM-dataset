@@ -138,14 +138,20 @@ This section is for developers contributing to the `tvsm-smad` package. If you'r
 
 **Prerequisites:** Python 3.10 or higher is required (the package supports Python 3.10–3.13).
 
-1. Install the package in editable mode with dev dependencies:
+1. Set up a virtual environment (recommended):
    ```bash
-   python3.10 -m pip install -e ".[dev]"
+   python3.10 -m venv smad_venv
+   source smad_venv/bin/activate
    ```
 
-2. Run the test suite with pytest:
+2. Install the package in editable mode with dev dependencies:
    ```bash
-   python3.10 -m pytest -v tests/
+   pip install -e ".[dev]"
+   ```
+
+3. Run the test suite with pytest:
+   ```bash
+   pytest -v
    ```
 
    Note: Tests require the bundled TVSM-pseudo model checkpoint (~3MB), which is included in the repo at `src/tvsm_smad/models/TVSM-pseudo/`. If you've cloned the repo, the model should already be available.
