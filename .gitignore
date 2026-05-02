@@ -1,3 +1,28 @@
 TVSM Datasets/
-.idea
 **/__pycache__/
+
+# Build / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+*.egg-info/
+
+# Environments
+.venv/
+smad_venv/
+env/
+venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
