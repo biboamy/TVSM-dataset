@@ -44,8 +44,8 @@ class F2M(nn.Module):
             f_m_plus = bins[m + 1].item()
 
             if f_m_minus != f_m:
-                fb[f_m_minus:f_m, m - 1] = (
-                    (torch.arange(f_m_minus, f_m) - f_m_minus).float() / (f_m - f_m_minus)
+                fb[f_m_minus:f_m, m - 1] = (torch.arange(f_m_minus, f_m) - f_m_minus).float() / (
+                    f_m - f_m_minus
                 )
             if f_m != f_m_plus:
                 fb[f_m:f_m_plus, m - 1] = torch.div(

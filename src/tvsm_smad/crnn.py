@@ -49,9 +49,7 @@ class CRNN(nn.Module):
         x = self.c2(x)
         x = self.c3(x)
         x = self.b1(
-            self.lstm1(x.reshape(x.shape[0], -1, x.shape[-1]).permute(0, 2, 1))[0].permute(
-                0, 2, 1
-            )
+            self.lstm1(x.reshape(x.shape[0], -1, x.shape[-1]).permute(0, 2, 1))[0].permute(0, 2, 1)
         )
         x = self.b2(self.lstm2(x.permute(0, 2, 1))[0].permute(0, 2, 1))
         x = self.last(x.permute(0, 2, 1))

@@ -17,7 +17,6 @@ from __future__ import annotations
 import csv
 import logging
 from importlib import resources
-from pathlib import Path
 
 import librosa
 import numpy as np
@@ -67,12 +66,17 @@ class SMDetector:
         self.model.to(self.device)
         self.model.eval()
 
-        self.pcen_transform = T.Compose([
-            torchaudio.transforms.MelSpectrogram(
-                sample_rate=SR, n_fft=N_FFT, hop_length=HOP_SIZE, n_mels=128,
-            ).to(self.device),
-            PCENTransform().to(self.device),
-        ])
+        self.pcen_transform = T.Compose(
+            [
+                torchaudio.transforms.MelSpectrogram(
+                    sample_rate=SR,
+                    n_fft=N_FFT,
+                    hop_length=HOP_SIZE,
+                    n_mels=128,
+                ).to(self.device),
+                PCENTransform().to(self.device),
+            ]
+        )
         logger.info("TVSM detector ready on %s", self.device)
 
     def predict_audio(self, audio_path: str) -> list[dict]:
@@ -112,12 +116,14 @@ class SMDetector:
 
         results = []
         for i, frame in enumerate(est_np.T):
-            results.append({
-                "start_time_s": float(frame_time * i),
-                "end_time_s": float(frame_time * (i + 1)),
-                "music_prob": round(float(frame[0]), 4),
-                "speech_prob": round(float(frame[1]), 4),
-            })
+            results.append(
+                {
+                    "start_time_s": float(frame_time * i),
+                    "end_time_s": float(frame_time * (i + 1)),
+                    "music_prob": round(float(frame[0]), 4),
+                    "speech_prob": round(float(frame[1]), 4),
+                }
+            )
 
         return results
 

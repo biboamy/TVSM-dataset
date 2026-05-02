@@ -3,7 +3,7 @@
 import torch
 
 from tvsm_smad.crnn import CRNN
-from tvsm_smad.pcen import PCENTransform, F2M
+from tvsm_smad.pcen import F2M, PCENTransform
 
 
 def test_crnn_forward_shape():
@@ -36,6 +36,7 @@ def test_f2m_output_shape():
 def test_bundled_model_exists():
     """The bundled model checkpoint should be resolvable."""
     from tvsm_smad.detector import _default_model_path
+
     path = _default_model_path()
     assert path.endswith(".pt")
 
@@ -43,6 +44,7 @@ def test_bundled_model_exists():
 def test_smdetector_init():
     """SMDetector should initialize with the bundled model."""
     from tvsm_smad import SMDetector
+
     detector = SMDetector()
     assert detector.model is not None
     assert detector.device == torch.device("cpu")

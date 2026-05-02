@@ -3,6 +3,9 @@
 The TV Speech and Music (TVSM) dataset contains speech and music activity labels across a variety of TV shows and their corresponding audio features extracted from professionally-produced high-quality audio. 
 The dataset aims to facilitate research on speech and music detection tasks. 
 
+[![PyPI version](https://img.shields.io/pypi/v/tvsm-smad)](https://pypi.org/project/tvsm-smad/)
+[![CI](https://github.com/biboamy/TVSM-dataset/actions/workflows/ci.yml/badge.svg)](https://github.com/biboamy/TVSM-dataset/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Get the dataset
 
@@ -11,6 +14,7 @@ The dataset aims to facilitate research on speech and music detection tasks.
 - This repo contains materials and codebase to reproduce the baseline experiment in the paper.
 
 ## License and attribution
+
 ```
 @ARTICLE{Hung2022,
   title={A Large TV Dataset for Speech and Music Activity Detection},
@@ -23,6 +27,7 @@ The dataset aims to facilitate research on speech and music detection tasks.
   publisher={Springer}
 }
 ```
+
 The TVSM dataset is licensed under a [Apache License 2.0 license](https://www.apache.org/licenses/LICENSE-2.0) 
 
 ## Dataset introduction
@@ -95,6 +100,7 @@ Thanks @owlwang for the contribution! The easy-to-use inference code is now incl
 - **`inference/`** (original scripts) remains for backward compatibility and paper reproduction; it is **not** replaced by the package.
 - **`training_code/`**, **`Models/`**, **`Evaluation_Output/`** are unchanged.
 - Users who prefer the old workflow can keep using `inference/inference.py` after cloning.
+
 ```
 cd inference
 python3 inference.py --audio_path test.wav --output_dir output/ --format csv/csv_prob
@@ -149,22 +155,30 @@ This section is for developers contributing to the `tvsm-smad` package. If you'r
    pip install -e ".[dev]"
    ```
 
-3. Run the test suite with pytest:
+3. Run the test suite:
    ```bash
    pytest -v
    ```
 
-   Note: Tests require the bundled TVSM-pseudo model checkpoint (~3MB), which is included in the repo at `src/tvsm_smad/models/TVSM-pseudo/`. If you've cloned the repo, the model should already be available.
+4. Run linting and formatting checks:
+   ```bash
+   ruff check src/ tests/
+   ruff format --check src/ tests/
+   ```
 
-3. Verify the CLI is installed:
+5. Verify the CLI is installed:
    ```bash
    tvsm-detect --version
    ```
 
+For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Bug Fix
+
 If you encounter error "**batch response: This repository is over its data quota. Account responsible for LFS...**", 
 please download the model checkpoint from [Google Drive](https://drive.google.com/drive/folders/1THtEHYUh1lueUFH37n2VAhVy8n2QfNpp?usp=sharing)
 
 ## Contact
+
 Please feel free to contact [yhung33@gatech.edu](mailto:yhung33@gatech.edu) or open an issue here if you have any questions about the 
 dataset or the support code.
